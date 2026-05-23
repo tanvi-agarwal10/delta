@@ -9,7 +9,7 @@
  * ROUTING STRATEGY:
  * - / -> Dashboard
  * - /products -> Products listing
- * - /product/:id -> Product details (for future use)
+ * - /product/:id -> Product details
  * - /analytics -> Analytics page
  */
 
@@ -17,6 +17,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Layout } from './components/layout/Layout';
 import { Dashboard } from './pages/Dashboard';
 import { Products } from './pages/Products';
+import { ProductDetails } from './pages/ProductDetails';
 import { Analytics } from './pages/Analytics';
 import './App.css';
 
@@ -34,6 +35,10 @@ function App() {
           path="/products"
         />
         <Route
+          element={<Layout><ProductDetails /></Layout>}
+          path="/product/:id"
+        />
+        <Route
           element={<Layout><Analytics /></Layout>}
           path="/analytics"
         />
@@ -43,3 +48,4 @@ function App() {
 }
 
 export default App;
+

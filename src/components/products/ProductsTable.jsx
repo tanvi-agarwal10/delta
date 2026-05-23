@@ -32,7 +32,7 @@
  */
 
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Search, ChevronUp, ChevronDown, Loader } from 'lucide-react';
 import { productService } from '../../services/api';
@@ -46,6 +46,7 @@ import { formatPrice, getStockStatus, formatRating } from '../../utils/formatter
  * This is a best practice for filterable tables
  */
 export const ProductsTable = () => {
+  const navigate = useNavigate();
   // URL parameter management
   const [searchParams, setSearchParams] = useSearchParams();
   
@@ -301,6 +302,7 @@ export const ProductsTable = () => {
                       return (
                         <tr
                           key={product.id}
+                          onClick={() => navigate(`/product/${product.id}`)}
                           className="hover:bg-white/5 transition-colors cursor-pointer"
                         >
                           {/* Product name */}
