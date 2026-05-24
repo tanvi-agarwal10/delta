@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local-only documentation
+*LEARNING_GUIDE.md
+PROJECT_SUMMARY.md
+STATUS.md
