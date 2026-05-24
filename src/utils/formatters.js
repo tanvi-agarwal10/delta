@@ -95,12 +95,12 @@ export const formatRating = (rating) => {
  */
 export const getStockStatus = (stock) => {
   if (stock > 20) {
-    return { status: 'In Stock', color: 'text-green-400', bgColor: 'bg-green-400/10' };
+    return { status: 'In Stock', color: 'text-success', bgColor: 'bg-success/10' };
   }
   if (stock > 10) {
-    return { status: 'Low Stock', color: 'text-yellow-400', bgColor: 'bg-yellow-400/10' };
+    return { status: 'Low Stock', color: 'text-warning', bgColor: 'bg-warning/10' };
   }
-  return { status: 'Out of Stock', color: 'text-red-400', bgColor: 'bg-red-400/10' };
+  return { status: 'Out of Stock', color: 'text-error', bgColor: 'bg-error/10' };
 };
 
 /**

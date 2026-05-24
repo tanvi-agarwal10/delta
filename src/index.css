@@ -1,87 +1,77 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@config "../tailwind.config.js";
 
 @layer base {
   body {
-    @apply bg-dark-900 text-gray-100 font-sans;
+    @apply bg-dark-900 text-txt-primary antialiased;
+    font-family: 'Inter', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Outfit', sans-serif;
+    @apply text-white font-semibold tracking-tight;
   }
 }
 
 @layer components {
-  /* Glassmorphism cards */
+  /* Premium Glassmorphism cards with smooth subtle border & hover glow */
   .glass-card {
-    @apply bg-white/10 backdrop-blur-md border border-white/20 rounded-xl;
+    @apply bg-dark-800 backdrop-blur-xl border border-dark-600 rounded-2xl shadow-2xl shadow-black/30;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .glass-card-hover {
+    @apply hover:bg-dark-700 hover:border-dark-600 hover:shadow-accent-500/[0.02] hover:shadow-2xl hover:-translate-y-0.5;
   }
 
-  /* SaaS gradient buttons */
+  /* Premium SaaS gradient buttons */
   .btn-gradient {
-    @apply bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-medium transition-all duration-200;
+    @apply bg-gradient-to-r from-accent-500 to-accent-600 hover:from-accent-600 hover:to-accent-500 text-white font-semibold transition-all duration-300 shadow-lg shadow-accent-500/10 hover:shadow-accent-500/20 hover:scale-[1.01] active:scale-[0.99];
   }
 
-  /* Smooth transitions */
-  .transition-smooth {
-    @apply transition-all duration-300 ease-in-out;
+  /* Secondary outline buttons */
+  .btn-secondary {
+    @apply border border-dark-600 hover:border-dark-600 hover:bg-dark-700 text-txt-secondary hover:text-white font-medium rounded-xl transition-all duration-200 active:scale-[0.99];
   }
-}
+
+  /* Smooth scrollbars */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-dark-600 rounded-full hover:bg-dark-700 transition-colors;
+  }
 }
 
 body {
   margin: 0;
+  overflow-x: hidden;
 }
 
 #root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
+  width: 100%;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
-
 h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
+  font-size: 2.25rem;
+  letter-spacing: -0.03em;
   margin: 0;
 }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+h2 {
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+  margin: 0;
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+p {
+  margin: 0;
 }

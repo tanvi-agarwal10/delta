@@ -27,13 +27,13 @@
  * Before adding to cart or sharing
  */
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
-import { productService } from '../../services/api';
-import { formatPrice, formatRating, getStockStatus } from '../../utils/formatters';
+import { productService } from '../services/api';
+import { formatPrice, formatRating, getStockStatus } from '../utils/formatters';
 import { ArrowLeft, ShoppingCart, Share2, Heart } from 'lucide-react';
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -67,8 +67,8 @@ export const ProductDetails = () => {
     return (
       <div className="min-h-screen bg-dark-900 p-6 md:p-8 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-400 mx-auto mb-4"></div>
-          <p className="text-gray-400">Loading product...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent-500 mx-auto mb-4"></div>
+          <p className="text-txt-secondary">Loading product...</p>
         </div>
       </div>
     );
@@ -79,7 +79,7 @@ export const ProductDetails = () => {
       <div className="min-h-screen bg-dark-900 p-6 md:p-8">
         <button
           onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-indigo-400 hover:text-indigo-300 mb-8"
+          className="flex items-center gap-2 text-accent-500 hover:text-accent-600 mb-8"
         >
           <ArrowLeft size={20} />
           Back
@@ -99,7 +99,7 @@ export const ProductDetails = () => {
         {/* Back button */}
         <button
           onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-indigo-400 hover:text-indigo-300 mb-8 transition-colors"
+          className="flex items-center gap-2 text-accent-500 hover:text-accent-600 mb-8 transition-colors"
         >
           <ArrowLeft size={20} />
           Back
@@ -120,7 +120,7 @@ export const ProductDetails = () => {
                 <img
                   src={product.images?.[0] || product.thumbnail}
                   alt={product.title}
-                  className="w-full h-96 object-cover bg-dark-700"
+                  className="w-full h-96 object-cover bg-dark-900"
                 />
               </SwiperSlide>
 
@@ -130,7 +130,7 @@ export const ProductDetails = () => {
                   <img
                     src={image}
                     alt={`${product.title} ${idx + 2}`}
-                    className="w-full h-96 object-cover bg-dark-700"
+                    className="w-full h-96 object-cover bg-dark-900"
                   />
                 </SwiperSlide>
               ))}
@@ -155,7 +155,7 @@ export const ProductDetails = () => {
           <div className="space-y-6">
             {/* Category badge */}
             <div>
-              <span className="inline-block px-3 py-1 rounded-full bg-indigo-400/10 border border-indigo-400/30 text-indigo-400 text-sm font-medium capitalize">
+              <span className="inline-block px-3 py-1 rounded-full bg-accent-500/10 border border-accent-500/30 text-accent-500 text-sm font-medium capitalize">
                 {product.category}
               </span>
             </div>
@@ -175,7 +175,7 @@ export const ProductDetails = () => {
             {/* Price */}
             <div className="glass-card p-6 space-y-2">
               <p className="text-gray-400 text-sm">Price</p>
-              <p className="text-4xl font-bold text-transparent bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text">
+              <p className="text-4xl font-bold text-transparent bg-gradient-to-r from-accent-500 to-accent-600 bg-clip-text">
                 {formatPrice(product.price)}
               </p>
               {product.discountPercentage > 0 && (
@@ -216,10 +216,10 @@ export const ProductDetails = () => {
             <div className="space-y-3 pt-6">
               {/* Quantity and Add to cart */}
               <div className="flex items-center gap-3">
-                <div className="flex items-center border border-white/10 rounded-lg">
+                <div className="flex items-center border border-dark-600 rounded-lg">
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="px-4 py-2 hover:bg-white/5 transition-colors"
+                    className="px-4 py-2 hover:bg-dark-700 transition-colors"
                     aria-label="Decrease quantity"
                   >
                     −
@@ -228,11 +228,11 @@ export const ProductDetails = () => {
                     type="number"
                     value={quantity}
                     onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-                    className="w-16 text-center bg-transparent border-l border-r border-white/10 text-white"
+                    className="w-16 text-center bg-transparent border-l border-r border-dark-600 text-white"
                   />
                   <button
                     onClick={() => setQuantity(quantity + 1)}
-                    className="px-4 py-2 hover:bg-white/5 transition-colors"
+                    className="px-4 py-2 hover:bg-dark-700 transition-colors"
                     aria-label="Increase quantity"
                   >
                     +
@@ -249,12 +249,12 @@ export const ProductDetails = () => {
               <div className="flex gap-3">
                 <button
                   onClick={() => setIsFavorited(!isFavorited)}
-                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg border border-white/10 hover:bg-white/5 transition-colors text-white"
+                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg border border-dark-600 hover:bg-dark-700 transition-colors text-white"
                 >
                   <Heart size={20} fill={isFavorited ? 'currentColor' : 'none'} />
                   {isFavorited ? 'Favorited' : 'Add to Favorites'}
                 </button>
-                <button className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg border border-white/10 hover:bg-white/5 transition-colors text-white">
+                <button className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg border border-dark-600 hover:bg-dark-700 transition-colors text-white">
                   <Share2 size={20} />
                   Share
                 </button>
@@ -265,7 +265,7 @@ export const ProductDetails = () => {
 
         {/* Reviews section (placeholder for later) */}
         {product.reviews && product.reviews.length > 0 && (
-          <div className="mt-12 pt-8 border-t border-white/10">
+          <div className="mt-12 pt-8 border-t border-dark-600">
             <h2 className="text-2xl font-bold text-white mb-6">Customer Reviews</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {product.reviews.slice(0, 3).map((review, idx) => (

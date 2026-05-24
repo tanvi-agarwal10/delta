@@ -81,13 +81,18 @@ export const debounce = (func, delay) => {
  * 2. Cleanup happens automatically
  * 3. Works correctly with React's lifecycle
  */
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useEffect } from 'react';
 
 export const useDebounce = (callback, delay) => {
   const timeoutRef = useRef(null);
+  const callbackRef = useRef(callback);
 
-  // useCallback ensures this function doesn't change between renders
-  // unless callback or delay changes
+  // Keep callbackRef up to date with the latest callback on every render
+  useEffect(() => {
+    callbackRef.current = callback;
+  }, [callback]);
+
+  // useCallback ensures this function doesn't change between renders unless delay changes
   const debouncedCallback = useCallback(
     (...args) => {
       // Clear existing timer
@@ -97,10 +102,10 @@ export const useDebounce = (callback, delay) => {
 
       // Set new timer
       timeoutRef.current = setTimeout(() => {
-        callback(...args);
+        callbackRef.current(...args);
       }, delay);
     },
-    [callback, delay]
+    [delay]
   );
 
   return debouncedCallback;

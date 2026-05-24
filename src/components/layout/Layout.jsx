@@ -28,7 +28,7 @@
  * This makes testing and reusing easier.
  */
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Sidebar } from './Sidebar';
 import { Navbar } from './Navbar';
 
@@ -39,10 +39,15 @@ import { Navbar } from './Navbar';
  * - children: Page content to display in main area
  * 
  * STATE:
- * - sidebarOpen: Whether sidebar is visible on mobile
+ * - sidebarOpen: Whether sidebar is visible
  */
 export const Layout = ({ children }) => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth >= 768;
+    }
+    return true;
+  });
 
   return (
     <div className="flex h-screen bg-dark-900 text-gray-100 overflow-hidden">
@@ -55,7 +60,10 @@ export const Layout = ({ children }) => {
       {/* Main content area */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Navbar - Top bar */}
-        <Navbar onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
+        <Navbar 
+          isSidebarOpen={sidebarOpen} 
+          onMenuClick={() => setSidebarOpen(!sidebarOpen)} 
+        />
 
         {/* Page content - scrollable area */}
         <main className="flex-1 overflow-auto">

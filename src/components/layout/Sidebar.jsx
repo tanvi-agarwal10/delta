@@ -26,13 +26,11 @@
  *  On desktop, it's always visible. This improves UX across all devices."
  */
 
-import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard,
   ShoppingCart,
   BarChart3,
-  Menu,
   X,
   ChevronRight,
 } from 'lucide-react';
@@ -72,27 +70,16 @@ const NAV_ITEMS = [
  * Sidebar Navigation Component
  * 
  * Props:
- * - isOpen: Controls sidebar visibility on mobile (optional)
- * - onClose: Callback when sidebar should close (optional)
- * 
- * STATE:
- * - isCollapsed: Whether sidebar is in collapsed state on tablet
- *   Desktop: always false (sidebar always visible)
- *   Tablet: can toggle between true/false
- *   Mobile: always true (hidden, but state doesn't matter due to modal overlay)
+ * - isOpen: Controls sidebar visibility (on mobile and desktop)
+ * - onClose: Callback when sidebar should close/hide
  */
 export const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
   const location = useLocation();
 
   /**
    * RESPONSIVE BEHAVIOR:
-   * hidden: On mobile (< 640px), sidebar is hidden by default
-   * md:translate-x-0: On tablet+ (640px), sidebar is always visible
-   * 
-   * WHY THIS APPROACH?
-   * CSS-based responsiveness is more performant than JavaScript.
-   * We use CSS media queries and Tailwind's responsive prefixes.
+   * on desktop/laptop: setting md:-ml-64 pulls the static container left by 
+   * its entire width, hiding it and allowing flex main content to fill the screen smoothly.
    */
   return (
     <>
@@ -108,47 +95,45 @@ export const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
       {/* Sidebar container */}
       <aside
         className={`
-          fixed left-0 top-0 h-full bg-dark-800 border-r border-white/10
-          transition-all duration-300 ease-in-out
+          fixed left-0 top-0 h-full bg-dark-800/80 backdrop-blur-xl border-r border-dark-600
+          transition-all duration-300 ease-in-out flex flex-col z-40
           
-          /* Mobile: slide in/out from left */
-          w-64 md:w-64 md:translate-x-0 md:static
-          ${isOpen ? 'translate-x-0' : '-translate-x-full'}
-          ${isOpen ? 'z-40 md:z-auto' : 'md:z-auto'}
+          /* Width & positioning */
+          w-64 md:static md:translate-x-0
           
-          /* Collapsed state on tablet+ */
-          ${isCollapsed ? 'md:w-20' : 'md:w-64'}
+          /* Toggle visibility: slide out and pull margin on desktop */
+          ${isOpen ? 'translate-x-0' : '-translate-x-full md:-ml-64'}
         `}
       >
         {/* Header */}
-        <div className="p-6 border-b border-white/10">
+        <div className="p-6 border-b border-dark-600">
           <div className="flex items-center justify-between">
-            {/* Logo/Brand - hide when collapsed */}
-            <div className={`transition-all duration-300 ${isCollapsed ? 'md:hidden' : ''}`}>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
+            {/* Logo/Brand */}
+            <div className="transition-all duration-300 opacity-100">
+              <h1 className="text-2xl font-extrabold bg-gradient-to-r from-white to-accent-500 bg-clip-text text-transparent tracking-tight">
                 Nova
               </h1>
-              <p className="text-xs text-gray-400">Admin Dashboard</p>
+              <p className="text-[10px] tracking-wider uppercase text-accent-500/60 font-bold">
+                Admin Console
+              </p>
             </div>
 
             {/* Collapse toggle - only show on tablet+ */}
             <button
-              onClick={() => setIsCollapsed(!isCollapsed)}
-              className="hidden md:flex items-center justify-center w-10 h-10 rounded-lg hover:bg-white/10 transition-colors"
-              aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+              onClick={onClose}
+              className="hidden md:flex items-center justify-center w-8 h-8 rounded-lg bg-dark-700 border border-dark-600 hover:bg-dark-600 text-txt-secondary hover:text-txt-primary transition-all"
+              aria-label="Collapse sidebar"
             >
               <ChevronRight
-                size={20}
-                className={`transition-transform duration-300 ${
-                  isCollapsed ? 'rotate-180' : ''
-                }`}
+                size={16}
+                className="rotate-180"
               />
             </button>
 
             {/* Close button - only show on mobile */}
             <button
               onClick={onClose}
-              className="md:hidden flex items-center justify-center w-10 h-10 rounded-lg hover:bg-white/10 transition-colors"
+              className="md:hidden flex items-center justify-center w-10 h-10 rounded-lg hover:bg-dark-700 text-txt-secondary hover:text-txt-primary transition-colors"
               aria-label="Close sidebar"
             >
               <X size={20} />
@@ -157,7 +142,7 @@ export const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
         </div>
 
         {/* Navigation items */}
-        <nav className="flex-1 py-4 overflow-y-auto">
+        <nav className="flex-1 py-6 overflow-y-auto space-y-1.5 custom-scrollbar">
           {NAV_ITEMS.map((item) => {
             const isActive = location.pathname === item.path;
             const Icon = item.icon;
@@ -166,41 +151,38 @@ export const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
               <Link
                 key={item.path}
                 to={item.path}
-                onClick={onClose} // Close sidebar on mobile after navigation
+                onClick={() => {
+                  if (window.innerWidth < 768) {
+                    onClose();
+                  }
+                }}
                 className={`
-                  flex items-center gap-3 px-4 py-3 mx-2 rounded-lg
-                  transition-all duration-200 group
+                  flex items-center gap-3 px-4 py-3 mx-3.5 rounded-xl
+                  transition-all duration-300 group relative border
                   ${
                     isActive
-                      ? 'bg-gradient-to-r from-indigo-500/20 to-purple-500/20 border border-indigo-400/30'
-                      : 'hover:bg-white/5 border border-transparent'
+                      ? 'bg-accent-500/10 border-accent-500/20 text-white font-medium shadow-inner shadow-accent-500/5'
+                      : 'hover:bg-dark-700/50 text-txt-secondary hover:text-txt-primary border-transparent'
                   }
                 `}
                 aria-current={isActive ? 'page' : undefined}
               >
                 {/* Icon */}
                 <Icon
-                  size={20}
-                  className={`flex-shrink-0 transition-colors ${
-                    isActive ? 'text-indigo-400' : 'text-gray-400 group-hover:text-gray-300'
+                  size={18}
+                  className={`flex-shrink-0 transition-colors duration-300 ${
+                    isActive ? 'text-accent-500' : 'text-txt-secondary group-hover:text-accent-500'
                   }`}
                 />
 
-                {/* Label - hide when collapsed */}
-                {!isCollapsed && (
-                  <span
-                    className={`transition-colors ${
-                      isActive ? 'text-white font-medium' : 'text-gray-400 group-hover:text-gray-300'
-                    }`}
-                  >
-                    {item.label}
-                  </span>
-                )}
-
-                {/* Active indicator dot - show when collapsed */}
-                {isCollapsed && isActive && (
-                  <div className="absolute left-2 w-1 h-6 bg-indigo-400 rounded-r-full" />
-                )}
+                {/* Label */}
+                <span
+                  className={`transition-colors duration-300 text-sm ${
+                    isActive ? 'text-txt-primary font-medium' : 'text-txt-secondary group-hover:text-txt-primary'
+                  }`}
+                >
+                  {item.label}
+                </span>
               </Link>
             );
           })}
@@ -208,11 +190,10 @@ export const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
 
         {/* Footer section */}
         <div
-          className="p-4 border-t border-white/10"
-          title={isCollapsed ? 'App version 1.0' : ''}
+          className="p-4 border-t border-dark-600 flex items-center justify-center"
         >
-          <p className={`text-xs text-gray-500 ${isCollapsed ? 'hidden' : 'text-center'}`}>
-            v1.0.0
+          <p className="text-[10px] text-gray-500 font-medium text-center">
+            NOVADMIN V1.0.0
           </p>
         </div>
       </aside>

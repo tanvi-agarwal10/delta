@@ -8,14 +8,21 @@ export default {
     extend: {
       colors: {
         dark: {
-          900: '#0a0e27',
-          800: '#151932',
-          700: '#1e2341',
-          600: '#2a2f4a',
+          900: '#0D1117', // Background
+          800: '#161B22', // Surface
+          700: '#1F2937', // Secondary Surface
+          600: '#2A3441', // Border
         },
         accent: {
-          500: '#6366f1',
-          600: '#4f46e5',
+          500: '#6366F1', // Primary Accent
+          600: '#7C83FF', // Hover Accent
+        },
+        success: '#22C55E',
+        warning: '#F59E0B',
+        error: '#EF4444',
+        txt: {
+          primary: '#F3F4F6',
+          secondary: '#9CA3AF',
         }
       },
       backdropBlur: {

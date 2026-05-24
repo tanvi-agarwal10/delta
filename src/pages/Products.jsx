@@ -30,7 +30,6 @@
  * - Separation of concerns: easier to maintain and test
  */
 
-import React from 'react';
 import { ProductsTable } from '../components/products/ProductsTable';
 
 export const Products = () => {
